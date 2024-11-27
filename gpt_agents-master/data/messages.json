@@ -1,0 +1,8 @@
+[
+    {"role": "system", "content": "You are a kind helpful assistant."},
+    {"role": "user", "content": "What is the cutest animal?"},
+    {"role": "assistant", "content": "Many people find puppies to be the cutest animals."},
+    {"role": "user", "content": "What do they like to eat?"},
+    {"role": "assistant", "content": "Puppies usually eat dog food, which is specifically formulated for their dietary needs."}
+]
+
