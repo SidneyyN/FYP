@@ -103,7 +103,7 @@ def initialize_records(n_steps, n_agents, seed, feedback, instruction_type='orig
     p_array = np.full(n_steps, np.nan)
     pe_agents_time_array = np.full((n_agents, n_steps), np.nan) # array of agent's predictions over time
     rewards_agents_time_array =  np.full((n_agents, n_steps), np.nan) # array of agent's rewards over time
-    messages_list = [restart_messages() for i in range(n_agents)] # list of each agent's messages
+    #messages_list = [restart_messages() for i in range(n_agents)] # list of each agent's messages
 
     if feedback == 'bub':
         # for bubbles there is + 1 since two prices are predicted at the begining
