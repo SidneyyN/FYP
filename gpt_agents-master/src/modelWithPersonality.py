@@ -63,10 +63,13 @@ def initialize_records(n_steps, n_agents, seed, feedback, instruction_type='orig
     set continue simulation = True
     Also sets random array of seeds for each agents
     '''
-    np.random.seed(seed)
+    if seed:
+        np.random.seed(seed)
 
     # assign random personalities 
-    personalities = np.random.choice(['optimistic', 'cautious', 'neutral'], size=n_agents)
+    # personalities = np.random.choice(['risk-seeking', 'risk-adverse', 'risk-neutral'], size=n_agents)
+    # assign all agents as risk-adverse / risk-neutral / risk-seeking
+    personalities = ['risk-seeking'] * n_agents 
 
     # Set experiment type
     if feedback == 'pos':
@@ -92,7 +95,9 @@ def initialize_records(n_steps, n_agents, seed, feedback, instruction_type='orig
         if random_start:
             init_message = initial_message_random
     elif instruction_type == 'original_30-50w' and feedback == 'neg':
-        restart_messages = restart_messages_original_neg
+        for personality in personalities:
+            restart_messages = restart_messages_original_neg_personality(personality)
+            messages_list.append(restart_messages)
         init_message = initial_message
         fw_up_message = follow_up_message
         if random_start:
@@ -120,7 +125,8 @@ def initialize_records(n_steps, n_agents, seed, feedback, instruction_type='orig
     instructions_len = len(messages_list[0])
     
     # set seed and bool
-    np.random.seed(seed)
+    if seed:
+        np.random.seed(seed)
     continue_simulation = True 
 
     # set array of seeds for each agent
@@ -459,7 +465,8 @@ def run_experiment(seed, expmnt_num, noise_mean, noise_sd, temperature, memory, 
     '''
 
     # Set the global seed for reproducibility
-    np.random.seed(seed)
+    if seed:
+        np.random.seed(seed)
 
     # Generate fingerprint
     params = {
