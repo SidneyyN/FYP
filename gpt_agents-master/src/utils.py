@@ -98,3 +98,55 @@ def consolidate_experiment_results(folder_path, output_file):
         print(f"Consolidated data saved to {output_file}")
     else: 
         print("No valid data found")
+
+
+def consolidate_experiment_variance(folder_path, output_file):
+    """
+    Reads through all CSV files in a folder and consolidates the variance of predicted price 
+    and actual price for each time step per agent across all experiments.
+    
+    Parameters:
+    folder_path (str): Path to the folder containing the CSV files.
+    output_file (str): Name of the output file to save results.
+    """
+    all_data = []
+
+    # Normalize the folder path to avoid mix of slashes
+    folder_path = os.path.abspath(folder_path)
+
+    for file in os.listdir(folder_path):
+        if file.endswith(".csv"):
+            file_path = os.path.join(folder_path, file)
+            try:
+                df = pd.read_csv(file_path)  # Read CSV
+
+                # Debugging step: Print columns found
+                print(f"\nReading file: {file_path}")  # Ensure correct file path
+                print("Columns in file:", df.columns.tolist())
+
+                # Ensure necessary columns exist
+                required_columns = {'time_step', 'agent_id', 'predicted_price', 'actual_price'}
+                if not required_columns.issubset(df.columns):
+                    print(f"Skipping {file}: Missing required columns")
+                    continue  # Skip this file
+
+                all_data.append(df[['time_step', 'agent_id', 'predicted_price', 'actual_price']])
+
+            except Exception as e:
+                print(f"Error reading {file_path}: {e}")
+
+    if all_data:
+        combined_df = pd.concat(all_data, ignore_index=True)
+
+        # Group by time_step and agent_id to compute variance per agent per time step
+        final_summary = combined_df.groupby(["time_step", "agent_id"]).agg(
+            variance_predicted_price=('predicted_price', 'var'),
+            variance_actual_price=('actual_price', 'var')
+        ).reset_index()
+
+        output_path = os.path.join(folder_path, output_file)
+
+        final_summary.to_csv(output_path, index=False)
+        print(f"Variance data saved to {output_path}")
+    else:
+        print("No valid data found")
