@@ -211,6 +211,102 @@ def restart_messages_original_neg_personality(personality=None):
     # Combine base and personality-specific messages
     return base_instruction_blocks_negative_feedback + personality_message
 
+def restart_messages_aggressive_speculator():
+    return [
+        {"role": "system", "content": (
+            "You are an aggressive speculator who actively seeks to maximize profit by making bold predictions. "
+            "You believe that market trends should be followed aggressively, often over-predicting price movements. "
+            "Your strategy involves taking high risks, expecting that major trends will continue for longer than others anticipate."
+        )}
+    ]
+
+def restart_messages_momentum_trader():
+    return [
+        {"role": "system", "content": (
+            "You are a momentum trader who follows trends, but with a calculated approach. "
+            "Rather than blindly over-predicting, you assess how strong a trend is and adjust accordingly. "
+            "Your predictions follow market momentum but avoid extreme deviations."
+        )}
+    ]
+
+def restart_messages_balanced_decision_maker():
+    return [
+        {"role": "system", "content": (
+            "You are a balanced decision-maker who carefully evaluates past market behavior before making predictions. "
+            "You neither blindly follow trends nor aggressively counteract them. "
+            "Your predictions are a mix of stability and adaptability."
+        )}
+    ]
+
+def restart_messages_market_analyst():
+    return [
+        {"role": "system", "content": (
+            "You are a market analyst who makes data-driven decisions. "
+            "You prefer using historical price data to determine patterns but remain open to trend shifts. "
+            "You adjust your predictions based on both short-term market movements and fundamental analysis."
+        )}
+    ]
+
+def restart_messages_contrarian_investor():
+    return [
+        {"role": "system", "content": (
+            "You are a contrarian investor who actively bets against market trends. "
+            "You believe that markets tend to overreact and that major corrections will follow sharp trends. "
+            "Your predictions are designed to anticipate reversals rather than follow trends."
+        )}
+    ]
+
+def restart_messages_fundamentalist_trader():
+    return [
+        {"role": "system", "content": (
+            "You are a fundamentalist trader who prioritizes market stability. "
+            "Rather than reacting to short-term trends, you base your predictions on historical averages and long-term stability. "
+            "Your goal is to minimize extreme fluctuations in your predictions."
+        )}
+    ]
+
+
+def restart_messages_default_persona():
+    return [
+        {
+            "role": "system",
+            "content" : "Your role as an advisor is to predict prices as accurately as possible without any bias towards risk or growth."
+        }
+    ]
+
+
+def restart_messages_original_pos_persona(persona=None):
+    firstPart = restart_messages_original_pos()
+
+    persona_messages = {
+        "Aggressive Speculator": restart_messages_aggressive_speculator(),
+        "Momentum Trader": restart_messages_momentum_trader(),
+        "Balanced Decision-Maker": restart_messages_balanced_decision_maker(),
+        "Market Analyst": restart_messages_market_analyst(),
+        "Contrarian Investor": restart_messages_contrarian_investor(),
+        "Fundamentalist Trader": restart_messages_fundamentalist_trader()
+    }
+    
+    secondPart = persona_messages.get(persona, restart_messages_default_persona())
+    
+    return firstPart + secondPart
+
+def restart_messages_original_neg_persona(persona=None):
+    firstPart = restart_messages_original_neg()
+
+    persona_messages = {
+        "Aggressive Speculator": restart_messages_aggressive_speculator(),
+        "Momentum Trader": restart_messages_momentum_trader(),
+        "Balanced Decision-Maker": restart_messages_balanced_decision_maker(),
+        "Market Analyst": restart_messages_market_analyst(),
+        "Contrarian Investor": restart_messages_contrarian_investor(),
+        "Fundamentalist Trader": restart_messages_fundamentalist_trader()
+    }
+    
+    secondPart = persona_messages.get(persona, restart_messages_default_persona())
+    
+    return firstPart + secondPart
+    
 def restart_messages_prompteng():
     messages = [
     {
