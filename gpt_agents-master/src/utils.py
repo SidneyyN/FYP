@@ -56,4 +56,45 @@ def create_batch_folder(persona, base_path="../results/experiments/"):
     return batch_folder  # Return the path for use in multiple experiments
 
 def consolidate_experiment_results(folder_path, output_file):
+    all_data = []
+
+    # Normalize the folder path to avoid mix of slashes
+    folder_path = os.path.abspath(folder_path)
+
+    for file in os.listdir(folder_path):
+        if file.endswith(".csv"):
+            file_path = os.path.join(folder_path, file)
+            try:
+                df = pd.read_csv(file_path)  # Read CSV instead of Excel
+
+                # Debugging step: Print columns found
+                print(f"\nReading file: {file_path}")  # Ensure correct file path
+                print("Columns in file:", df.columns.tolist())
+
+                # Ensure necessary columns exist
+                required_columns = {'time_step', 'agent_id', 'predicted_price', 'actual_price'}
+                if not required_columns.issubset(df.columns):
+                    print(f"Skipping {file}: Missing required columns")
+                    continue  # Skip this file
+
+                all_data.append(df[['time_step', 'agent_id', 'predicted_price', 'actual_price']])
+
+            except Exception as e:
+                print(f"Error reading {file_path}: {e}")
+
     
+    if all_data:
+        combined_df = pd.concat(all_data, ignore_index = True)
+
+        # Group by time_step and agent_id to compute the mean per agent per time step across experiments
+        final_summary = combined_df.groupby(["time_step", "agent_id"]).agg(
+            mean_predicted_price=('predicted_price', 'mean'),
+            mean_actual_price=('actual_price', 'mean')
+        ).reset_index()
+
+        output_file = os.path.join(folder_path, output_file)
+
+        final_summary.to_csv(output_file, index = False)
+        print(f"Consolidated data saved to {output_file}")
+    else: 
+        print("No valid data found")
