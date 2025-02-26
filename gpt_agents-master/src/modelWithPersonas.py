@@ -58,7 +58,7 @@ def f_bubbles(pe,noise_mean=3,noise_sd=1/4, r=0.05, seed=None):
 # functions for running llm-agents
 ##############
 
-def initialize_records(n_steps, n_agents, seed, feedback, persona_type, instruction_type='original_30-50w', fw_up_message=None, random_start=None):
+def initialize_records(n_steps, n_agents, seed, feedback, personas, instruction_type='original_30-50w', fw_up_message=None, random_start=None):
     '''Set experiment type according to feedback and instruction_type
     set random seeds and arrays/lists in which experiment information will be recorded
     set continue simulation = True
@@ -74,7 +74,13 @@ def initialize_records(n_steps, n_agents, seed, feedback, persona_type, instruct
     # Market Analyst 
     # Contrarian Investor 
     # Fundamentalist Trader 
-    personalities = [persona_type] * n_agents 
+
+    # We used to pass in a single persona to do experiments on individual personas
+    # personalities = [persona_type] * n_agents 
+
+    # Now we pass in an array of personas instead of a single persona type
+    if len(personas) != n_agents:
+        raise ValueError(f"Mismatch: You provided {len(personas)} personas for {n_agents} agents. Ensure they match.")
 
     # Set experiment type
     if feedback == 'pos':
@@ -92,27 +98,30 @@ def initialize_records(n_steps, n_agents, seed, feedback, persona_type, instruct
     messages_list = [] # list of each agent's messages 
     
     if instruction_type == 'original_30-50w' and feedback == 'pos':
-        for personality in personalities:
-            restart_messages = restart_messages_original_pos_persona(personality)
+        for persona in personas:
+            restart_messages = restart_messages_original_pos_persona(persona)
             messages_list.append(restart_messages)
         init_message = initial_message
         fw_up_message = follow_up_message
         if random_start:
             init_message = initial_message_random
+
     elif instruction_type == 'original_30-50w' and feedback == 'neg':
-        for personality in personalities:
-            restart_messages = restart_messages_original_neg_persona(personality)
+        for persona in personas:
+            restart_messages = restart_messages_original_neg_persona(persona)
             messages_list.append(restart_messages)
         init_message = initial_message
         fw_up_message = follow_up_message
         if random_start:
             init_message = initial_message_random
+
     elif instruction_type == 'original_30-50w' and feedback == 'bub':
         restart_messages = restart_messages_original_bubbles
         init_message = initial_message_bubbles
         fw_up_message = follow_up_message_bubbles
         if random_start:
             init_message = initial_message_bubbles_random
+
     elif instruction_type == 'prompteng':
         restart_messages = restart_messages_prompteng
                 
@@ -138,7 +147,7 @@ def initialize_records(n_steps, n_agents, seed, feedback, persona_type, instruct
     seeds_array = np.random.randint(0, 100000, size=(n_agents, n_steps))
     
     return f, p_array, pe_agents_time_array, rewards_agents_time_array, messages_list, \
-        init_message, fw_up_message, continue_simulation, instructions_len, seeds_array, personalities
+        init_message, fw_up_message, continue_simulation, instructions_len, seeds_array, personas
     
 def except_json(reply):
     ''' Check whether reply is in the right format if not ask llm to introduce another reply
@@ -465,7 +474,7 @@ def generate_fingerprint(params):
 
 def run_experiment(seed, expmnt_num, noise_mean, noise_sd, temperature, memory, gpt_model="gpt-3.5-turbo", n_steps=1, n_agents=1,
                    feedback='neg', instruction_type='original_30-50w', random_start=False, prints_on=True,\
-                   save_res_bool=True, path_exp='../results/experiments/', persona_type="Fundamentalist Trader"):
+                   save_res_bool=True, path_exp='../results/experiments/', personas=[]):
     
     '''Function that puts everything together to run the experiment
     seed, expmnt_num are to track random variation due to system and gpt (note gpt cannot be seeded)
@@ -500,14 +509,14 @@ def run_experiment(seed, expmnt_num, noise_mean, noise_sd, temperature, memory, 
    
     f, p_array, pe_agents_time, rewards_agents_time, \
     messages_list, initial_message, follow_up_message,\
-    continue_simulation, instructions_len, seeds_array, personalities = initialize_records(n_steps, n_agents, \
-                                            seed, feedback, persona_type, instruction_type=instruction_type, random_start=random_start)
+    continue_simulation, instructions_len, seeds_array, personas = initialize_records(n_steps, n_agents, \
+                                            seed, feedback, personas, instruction_type=instruction_type, random_start=random_start)
 
     for t in range(n_steps):
         pe_agents = np.full(n_agents, np.nan) # within time step agents prediction
         
         for i in range(n_agents):
-            if prints_on:  print(f" \n Time: {t}, agent: {i}, persona: {personalities[i]} \n")
+            if prints_on:  print(f" \n Time: {t}, agent: {i}, persona: {personas[i]} \n")
             seed_gpt = seeds_array[i, t]
 
             # Set the seed for agent-specific randomness
@@ -588,7 +597,7 @@ def run_experiment(seed, expmnt_num, noise_mean, noise_sd, temperature, memory, 
         
     if save_res_bool:
         
-        df = make_df_results(p_array, pe_agents_time, rewards_agents_time, personalities)
+        df = make_df_results(p_array, pe_agents_time, rewards_agents_time, personas)
         if random_start:
             save_results(df, messages_list, temperature, memory, feedback, instruction_type + "randstart", expmnt_num, seed, \
                   n_steps, n_agents, gpt_model, path_exp) 

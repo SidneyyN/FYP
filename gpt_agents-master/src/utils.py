@@ -1,6 +1,7 @@
 import os
 import datetime 
 import pandas as pd 
+import matplotlib.pyplot as plt
 
 # def check_existing_file(path_exp, expmnt_num, feedback, instruction_type, temperature, memory, n_steps, n_agents, gpt_model):
 #     temp_str = temp_str = str(temperature).replace('.', '-')
@@ -72,12 +73,12 @@ def consolidate_experiment_results(folder_path, output_file):
                 print("Columns in file:", df.columns.tolist())
 
                 # Ensure necessary columns exist
-                required_columns = {'time_step', 'agent_id', 'predicted_price', 'actual_price'}
+                required_columns = {'time_step', 'agent_id', 'predicted_price', 'actual_price', 'rewards'}
                 if not required_columns.issubset(df.columns):
                     print(f"Skipping {file}: Missing required columns")
                     continue  # Skip this file
 
-                all_data.append(df[['time_step', 'agent_id', 'predicted_price', 'actual_price']])
+                all_data.append(df[['time_step', 'agent_id', 'predicted_price', 'actual_price', 'rewards']])
 
             except Exception as e:
                 print(f"Error reading {file_path}: {e}")
@@ -89,7 +90,8 @@ def consolidate_experiment_results(folder_path, output_file):
         # Group by time_step and agent_id to compute the mean per agent per time step across experiments
         final_summary = combined_df.groupby(["time_step", "agent_id"]).agg(
             mean_predicted_price=('predicted_price', 'mean'),
-            mean_actual_price=('actual_price', 'mean')
+            mean_actual_price=('actual_price', 'mean'),
+            mean_rewards=('rewards', 'mean')
         ).reset_index()
 
         output_file = os.path.join(folder_path, output_file)
@@ -150,3 +152,41 @@ def consolidate_experiment_variance(folder_path, output_file):
         print(f"Variance data saved to {output_path}")
     else:
         print("No valid data found")
+
+def plot_experiment_results(csv_path):
+    """
+    Reads an experiment results CSV file and plots:
+    - Actual price vs. predicted prices over time
+    - Agent rewards over time
+
+    Parameters:
+    csv_path (str): Path to the CSV file containing experiment results.
+
+    Returns:
+    None
+    """
+    # Read CSV file into a DataFrame
+    df = pd.read_csv(csv_path)
+
+    # Create figure with two subplots
+    fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(10, 5), gridspec_kw={'height_ratios': [2, 1]})
+
+    # Plot actual and predicted prices
+    axs[0].plot(df['time_step'], df['mean_actual_price'], label='Actual Price', color="black", linewidth=3)
+    for agent_id, group in df.groupby('agent_id'):
+        axs[0].plot(group['time_step'], group['mean_predicted_price'], label=f'Predicted Price (Agent {agent_id})')
+
+    axs[0].set_xlabel('Time Step')
+    axs[0].set_ylabel('Price')
+    axs[0].legend()
+
+    # Plot rewards over time
+    for agent_id, group in df.groupby('agent_id'):
+        axs[1].plot(group['time_step'], group['mean_rewards'], label=f'Agent {agent_id}')
+
+    axs[1].set_xlabel('Time Step')
+    axs[1].set_ylabel('Rewards')
+    axs[1].legend()
+
+    plt.tight_layout()
+    plt.show()
