@@ -148,7 +148,7 @@ def initialize_records(n_steps, n_agents, seed, feedback, personas, instruction_
     
     return f, p_array, pe_agents_time_array, rewards_agents_time_array, messages_list, \
         init_message, fw_up_message, continue_simulation, instructions_len, seeds_array, personas
-    
+
 def except_json(reply):
     ''' Check whether reply is in the right format if not ask llm to introduce another reply
     attempt record the number of attempts to avoid infinite loop
