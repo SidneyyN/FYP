@@ -278,6 +278,15 @@ def restart_messages_default_persona():
 def restart_messages_original_pos_persona(persona=None):
     firstPart = restart_messages_original_pos()
 
+    # Only add this constraint reminder for positive feedback
+    constraint_reminder = {
+        "role": "system",
+        "content": "Reminder: Your predicted price should always be within the range of 0 and 100. Predictions outside this range will not be accepted, and you will be asked to submit another prediction."
+    }
+
+    # Append the reminder to the instructions 
+    firstPart.append(constraint_reminder)
+
     persona_messages = {
         "Aggressive Speculator": restart_messages_aggressive_speculator(),
         "Momentum Trader": restart_messages_momentum_trader(),
@@ -293,6 +302,14 @@ def restart_messages_original_pos_persona(persona=None):
 
 def restart_messages_original_neg_persona(persona=None):
     firstPart = restart_messages_original_neg()
+
+    constraint_reminder = {
+        "role": "system",
+        "content": "Reminder: Your predicted price should always be within the range of 0 and 100. Predictions outside this range will not be accepted, and you will be asked to submit another prediction."
+    }
+
+    # Append the reminder to the instructions 
+    firstPart.append(constraint_reminder)
 
     persona_messages = {
         "Aggressive Speculator": restart_messages_aggressive_speculator(),

@@ -430,6 +430,13 @@ def save_results(df, messages_list, temperature, memory, feedback, instruction_t
     
     #df.to_csv(csv_filename, index=False)
 
+    if df is None:
+        raise ValueError("Error: DataFrame is None. Check your data processing steps.")
+
+    if df.empty:
+        raise ValueError("Error: DataFrame is empty. No data to save.")
+
+
     try:
         df.to_csv(csv_filename, index=False)
         print(f"CSV saved successfully to {csv_filename}")
