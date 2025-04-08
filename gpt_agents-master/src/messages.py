@@ -119,11 +119,11 @@ def restart_messages_original_pos_personality(personality=None):
                 "content": "As a risk-seeking advisor, your strategy focuses on finding opportunities for growth. You tend to predict higher prices when there are positive market trends."
             }
         ]
-    elif personality == "risk-adverse":
+    elif personality == "risk-averse":
         personality_message = [
             {
                 "role": "system",
-                "content": "As a risk-adverse advisor, your goal is to minimize risks. You prioritize stable and conservative predictions to ensure reliable earnings."
+                "content": "As a risk-averse advisor, your goal is to minimize risks. You prioritize stable and conservative predictions to ensure reliable earnings."
             }
         ]
     elif personality == "risk-neutral":
@@ -186,11 +186,11 @@ def restart_messages_original_neg_personality(personality=None):
                 "content": "As a risk-seeking advisor, your strategy focuses on finding opportunities for growth. You tend to predict higher prices when there are positive market trends."
             }
         ]
-    elif personality == "risk-adverse":
+    elif personality == "risk-averse":
         personality_message = [
             {
                 "role": "system",
-                "content": "As a risk-adverse advisor, your goal is to minimize risks. You prioritize stable and conservative predictions to ensure reliable earnings."
+                "content": "As a risk-averse advisor, your goal is to minimize risks. You prioritize stable and conservative predictions to ensure reliable earnings."
             }
         ]
     elif personality == "risk-neutral":

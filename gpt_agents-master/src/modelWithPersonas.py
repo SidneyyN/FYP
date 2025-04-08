@@ -496,8 +496,6 @@ def run_experiment(seed, expmnt_num, noise_mean, noise_sd, temperature, memory, 
     path_exp(str): place where results are saved
     '''
 
-    # create new folder every time we run 
-
     # Set the global seed for reproducibility
     if seed:
         np.random.seed(seed)

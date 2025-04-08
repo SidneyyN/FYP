@@ -190,3 +190,33 @@ def plot_experiment_results(csv_path):
 
     plt.tight_layout()
     plt.show()
+
+def plot_time_series(csv_path):
+    """
+    Reads an experiment results CSV file and plots:
+    - Actual price vs. predicted prices over time
+    - Agent rewards over time
+
+    Parameters:
+    csv_path (str): Path to the CSV file containing experiment results.
+
+    Returns:
+    None
+    """
+    # Read CSV file into a DataFrame
+    df = pd.read_csv(csv_path)
+
+    # Create figure
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    # Plot actual and predicted prices
+    ax.plot(df['time_step'], df['mean_actual_price'], label='Actual Price', color="black", linewidth=3)
+    for agent_id, group in df.groupby('agent_id'):
+        ax.plot(group['time_step'], group['mean_predicted_price'], label=f'Predicted Price (Agent {agent_id})')
+
+    ax.set_xlabel('Time Step')
+    ax.set_ylabel('Price')
+    ax.legend()
+
+    plt.tight_layout()
+    plt.show()
