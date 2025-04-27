@@ -204,7 +204,13 @@ def plot_time_series(csv_path):
     None
     """
     # Read CSV file into a DataFrame
-    df = pd.read_csv(csv_path)
+    ext = os.path.splitext(csv_path)[1].lower()
+    if ext == '.csv':
+        df = pd.read_csv(csv_path)
+    elif ext in ['.xls', '.xlsx']:
+        df = pd.read_excel(csv_path)
+    else:
+        raise ValueError(f"Unsupported file type: {ext}")
 
     # Create figure
     fig, ax = plt.subplots(figsize=(10, 5))
@@ -216,6 +222,35 @@ def plot_time_series(csv_path):
 
     ax.set_xlabel('Time Step')
     ax.set_ylabel('Price')
+    ax.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_rewards_only(csv_path):
+    """
+    Reads an experiment results CSV file and plots:
+    - Agent rewards over time
+
+    Parameters:
+    csv_path (str): Path to the CSV file containing experiment results.
+
+    Returns:
+    None
+    """
+    # Read CSV file into a DataFrame
+    df = pd.read_csv(csv_path)
+
+    # Create figure
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    # Plot rewards over time
+    for agent_id, group in df.groupby('agent_id'):
+        ax.plot(group['time_step'], group['mean_rewards'], label=f'Agent {agent_id}')
+
+    ax.set_xlabel('Time Step')
+    ax.set_ylabel('Rewards')
+    ax.set_title('Agent Rewards Over Time')
     ax.legend()
 
     plt.tight_layout()
