@@ -27,11 +27,12 @@ This repository hosts the code used in the paper, which explores how generative 
 
 ## Changes that I have made
 
-These are all the additional changes that I have implemented. 
+Below is a summary of the key changes and additions I implemented to extend the original codebase:
 
-In `/src`, I have implemented seeding and fingerprint on top of the original code for `model.py`. After that, `modelWithPersonality.py` and `modelWithPersonas.py` are the experiment setups that personality agents and persona agents are using. These two files are created by me. I have extended `messages.py` to include personality agents and persona agents prompts. `utils.py` was also extended with different functions used for data consolidation and graph plotting. 
+In `/src` I implemented seeding and fingerprinting functionality within `model.py` to ensure reproducible experimental results. I also created two new modules, `modelWithPersonality.py` and `modelWithPersonas.py`, which define experimental setups for personality-based and persona-based agents, respectively. Furthermore, I extended `messages.py` to include prompt templates specific to both personality and persona agents, and I expanded `utils.py` with additional functions to support data consolidation and graph generation.
 
-In `/notebooks`, there are several more jupyter notebooks that I created to run my tests, such as `run_experiments_multiple_agents_personality.ipynb`, `run_experiments_multiple_agents_persona.ipynb`, `run_experiments_mixed_personas_constraints.ipynb`, and `run_experiments_mixed_personas.ipynb`. Some other notesbooks that I have created are `consolidated_graphs.ipynb`, `csv_consolidation.ipynb`, `csv_variance.ipynb`, `linear_regression_individual.ipynb`, and `linear_regression_mixed.ipynb`. 
+In `/notebooks`, I developed a number of Jupyter notebooks to support testing and experimentation. These include `run_experiments_multiple_agents_personality.ipynb`, `run_experiments_multiple_agents_persona.ipynb`, `run_experiments_mixed_personas_constraints.ipynb`, and `run_experiments_mixed_personas.ipynb`. To assist with analysis and visualization, I also created notebooks such as `consolidated_graphs.ipynb`, `csv_consolidation.ipynb`, `csv_variance.ipynb`, `linear_regression_individual.ipynb`, and `linear_regression_mixed.ipynb`.
+
 
 ## License
 
