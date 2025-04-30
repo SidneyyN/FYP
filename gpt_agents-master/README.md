@@ -22,7 +22,7 @@ This repository hosts the code used in the paper, which explores how generative 
 - `/data`: Datasets used in the experiments.
 - `/notebooks`: Jupyter notebooks with current work
 - `/results`: Output from simulations and experiments.
-- `/Linear Regression`: Consolidated experiment files (averages of 10 runs per experiment) are stored here for analysis for linear regression. Later on, we just create the consolidated files in each batch folder inside `/results` and just read from there. This is for the earlier attempts without creating custom tools to help with data consolidation.  
+- `/Linear Regression`: This folder contains consolidated experiment files, each representing the average results of 10 runs per experiment. These files were originally created to support linear regression analysis during early stages of the project, prior to the development of custom tools for automated data consolidation. In the current workflow, consolidated files are now generated directly within each batch folder under /results, making this directory primarily a legacy structure retained for reference.
 
 ## License
 
