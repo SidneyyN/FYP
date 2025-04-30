@@ -11,11 +11,10 @@ Authors:
 - Cars Hommes (Bank of Canada, University of Amsterdam)
 
 \*Equal contribution
-Market dynamics of price expectations with Generative AI agents
 
 ## Description
 
-This repository hosts the code used in the paper, which explores how generative AI agents can model and influence market dynamics, particularly focusing on price expectations in economic systems. The research utilizes agent-based modeling and machine learning techniques to simulate interactions between AI-driven economic agents. This project extends the foundational codebase developed by R. Maria del Rio-Chanona, Marco Pangallo, Pamela Mishkin, and Cars Hommes, whose pioneering work established the experimental framework for modeling expectations and price dynamics in economic systems. With their permission, I have significantly expanded upon this framework by incorporating a diverse set of personality and persona-driven prompts for LLM-based agents. In addition, I have developed new functionalities to support the analysis and synthesis of simulation results, including tools for linear regression, cross-experiment data consolidation from CSV files, and a suite of other utilities. These enhancements aim to deepen the investigation into how generative AI agents with heterogeneous characteristics can shape collective market behaviour through expectations.
+This project extends the codebase originally developed for the paper "Market dynamics of price expectations with Generative AI agents" by R. Maria del Rio-Chanona, Marco Pangallo, Pamela Mishkin, and Cars Hommes. This repository explores how generative AI agents can model and influence market dynamics, particularly focusing on price expectations in economic systems. The research utilizes agent-based modeling and machine learning techniques to simulate interactions between AI-driven economic agents. With their permission, I have significantly expanded upon this framework by incorporating a diverse set of personality and persona-driven prompts for LLM-based agents. In addition, I have developed new functionalities to support the analysis and synthesis of simulation results, including tools for linear regression, cross-experiment data consolidation from CSV files, and a suite of other utilities. These enhancements aim to deepen the investigation into how generative AI agents with heterogeneous characteristics can shape collective market behaviour through expectations.
 
 ## Directory structure
 
@@ -25,7 +24,7 @@ This repository hosts the code used in the paper, which explores how generative 
 - `/results`: Output from simulations and experiments.
 - `/Linear Regression`: This folder contains consolidated experiment files, each representing the average results of 10 runs per experiment. These files were originally created to support linear regression analysis during early stages of the project, prior to the development of custom tools for automated data consolidation. In the current workflow, consolidated files are now generated directly within each batch folder under /results, making this directory primarily a legacy structure retained for reference.
 
-## Changes that I have made
+## Modifications and Extensions
 
 Below is a summary of the key changes and additions I implemented to extend the original codebase:
 
